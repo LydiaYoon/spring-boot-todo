@@ -32,3 +32,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### node ###
+node_modules/
+dist/*
+*.log
