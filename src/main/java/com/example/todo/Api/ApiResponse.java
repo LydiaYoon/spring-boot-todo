@@ -1,15 +1,12 @@
 package com.example.todo.Api;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
+@NoArgsConstructor
 public abstract class ApiResponse<T> {
     // http response에 포함되어 브라우저로 전달 될 모델
     // Model 그대로 브라우저에 전달하는 것은 비즈니스 로직을 공개하는 것이므로 Response 클래스로 감싸주는 것이 좋다.

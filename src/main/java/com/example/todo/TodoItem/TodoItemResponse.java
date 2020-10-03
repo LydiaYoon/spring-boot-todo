@@ -9,7 +9,7 @@ public class TodoItemResponse extends ApiResponse<TodoItem> {
 
     @Builder
     public TodoItemResponse(final TodoItem todoItem, final List<String> errors) {
-        super(todoItem);
+        this.setData(todoItem);
         this.setErrors(errors);
     }
 }

@@ -15,13 +15,40 @@ public class TodoItemController {
     @Autowired
     private TodoItemService todoItemService;
 
-    @GetMapping(value = "/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     public @ResponseBody TodoItemResponse get(@PathVariable(value = "id") String id) {
         List<String> errors = new ArrayList<>();
         TodoItem todoItem = null;
 
         try {
             todoItem = todoItemService.get(id);
+        } catch (final Exception e) {
+            errors.add(e.getMessage());
+        }
+
+        return TodoItemAdapter.toTodoItemResponse(todoItem, errors);
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public @ResponseBody List<TodoItemResponse> getAll() {
+        List<String> errors = new ArrayList<>();
+        List<TodoItem> todoItems = todoItemService.getAll();
+        List<TodoItemResponse> todoItemResponses = new ArrayList<>();
+
+        todoItems.forEach(todoItem -> {
+            todoItemResponses.add(TodoItemAdapter.toTodoItemResponse(todoItem, errors));
+        });
+
+        return todoItemResponses;
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public @ResponseBody TodoItemResponse create(@RequestBody final TodoItemRequest todoItemRequest) {
+        List<String> errors = new ArrayList<>();
+        TodoItem todoItem = TodoItemAdapter.toTodoItem(todoItemRequest);
+
+        try {
+            todoItem = todoItemService.create(todoItem);
         } catch (final Exception e) {
             errors.add(e.getMessage());
         }
