@@ -39,6 +39,12 @@ public class TodoItemService {
         return todoItemRepository.save(originalItem);
     }
 
+    public void delete(final String id) {
+        final TodoItem todoItem = todoItemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Entity Nor Found"));
+        todoItemRepository.delete(todoItem);
+    }
+
     public List<TodoItem> getAll() {
         return todoItemRepository.findAll();
     }

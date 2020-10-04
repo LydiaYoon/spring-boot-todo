@@ -1,5 +1,6 @@
 package com.example.todo.TodoItem;
 
+import jdk.swing.interop.SwingInterOpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -74,5 +75,15 @@ public class TodoItemController {
             e.printStackTrace();
         }
         return TodoItemAdapter.toTodoItemResponse(todoItem, errors);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    public @ResponseBody
+    void delete(@PathVariable(value = "id") String id) {
+        try {
+            todoItemService.delete(id);
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
     }
 }
