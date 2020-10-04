@@ -1,54 +1,79 @@
-<<template>
-  <div class="hello">
-    오늘 해야 할 일
-    <ul v-if="todoItems && todoItems.length">
-      <li v-for="todoItem of todoItems">
-        {{todoItem.title}}
-      </li>
-    </ul>
-  </div>
+<
+<template>
+  <b-card
+    header="All Tasks"
+    style="max-width: 40rem; margin: auto; margin-top: 10vh;"
+    class="mb-2"
+    border-variant="info"
+    align="left">
+
+    <b-form-group id="to-do-input">
+      <b-container fluid>
+        <b-row class="my-1">
+          <b-col sm="9">
+            <b-form-input v-model="title" type="text" placeholder="I want to ..."/>
+          </b-col>
+          <b-col sm="3">
+            <b-button variant="primary">Add Task</b-button>
+          </b-col>
+        </b-row>
+      </b-container>
+    </b-form-group>
+
+    <b-list-group v-if="todoItems && todoItems.length">
+      <b-list-group-item
+        v-for="todoItem of todoItems"
+        v-bind:key="todoItem.id"
+        v-bind:data="todoItem.title">
+        <b-form-checkbox
+          v-model="todoItem.done">
+          {{todoItem.title}}
+        </b-form-checkbox>
+      </b-list-group-item>
+    </b-list-group>
+  </b-card>
 </template>
 
 <script>
-import axios from 'axios'
+  import axios from 'axios'
 
-export default {
-  name: 'hello',
-  data: () => {
-    return {
-      todoItems: [] // 초기화
+  export default {
+    name: 'hello',
+    data: () => {
+      return {
+        todoItems: [] // 초기화
+      }
+    },
+    created () {
+      axios.get('http://127.0.0.1:5000/todo/')
+        .then(response => {
+          this.todoItems = response.data.map(r => r.data)
+        })
+        .catch(e => {
+          console.log('error : ', e)
+        })
     }
-  },
-  created () {
-    axios.get('http://127.0.0.1:5000/todo/')
-      .then(response => {
-        this.todoItems = response.data.map(r => r.data)
-      })
-      .catch(e => {
-        console.log('error : ', e)
-      })
   }
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-h1, h2 {
-  font-weight: normal;
-}
+  h1, h2 {
+    font-weight: normal;
+  }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
 
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
+  li {
+    display: inline-block;
+    margin: 0 10px;
+  }
 
-a {
-  color: #35495E;
-}
+  a {
+    color: #35495E;
+  }
 </style>
 >
