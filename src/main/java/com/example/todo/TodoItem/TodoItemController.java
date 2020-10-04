@@ -16,7 +16,8 @@ public class TodoItemController {
     private TodoItemService todoItemService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public @ResponseBody TodoItemResponse get(@PathVariable(value = "id") String id) {
+    public @ResponseBody
+    TodoItemResponse get(@PathVariable(value = "id") String id) {
         List<String> errors = new ArrayList<>();
         TodoItem todoItem = null;
 
@@ -24,13 +25,15 @@ public class TodoItemController {
             todoItem = todoItemService.get(id);
         } catch (final Exception e) {
             errors.add(e.getMessage());
+            e.printStackTrace();
         }
 
         return TodoItemAdapter.toTodoItemResponse(todoItem, errors);
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public @ResponseBody List<TodoItemResponse> getAll() {
+    public @ResponseBody
+    List<TodoItemResponse> getAll() {
         List<String> errors = new ArrayList<>();
         List<TodoItem> todoItems = todoItemService.getAll();
         List<TodoItemResponse> todoItemResponses = new ArrayList<>();
@@ -43,7 +46,8 @@ public class TodoItemController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public @ResponseBody TodoItemResponse create(@RequestBody final TodoItemRequest todoItemRequest) {
+    public @ResponseBody
+    TodoItemResponse create(@RequestBody final TodoItemRequest todoItemRequest) {
         List<String> errors = new ArrayList<>();
         TodoItem todoItem = TodoItemAdapter.toTodoItem(todoItemRequest);
 
@@ -51,8 +55,24 @@ public class TodoItemController {
             todoItem = todoItemService.create(todoItem);
         } catch (final Exception e) {
             errors.add(e.getMessage());
+            e.printStackTrace();
         }
 
+        return TodoItemAdapter.toTodoItemResponse(todoItem, errors);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT)
+    public @ResponseBody
+    TodoItemResponse update(@RequestBody final TodoItemRequest todoItemRequest) {
+        List<String> errors = new ArrayList<>();
+        TodoItem todoItem = TodoItemAdapter.toTodoItem(todoItemRequest);
+
+        try {
+            todoItem = todoItemService.update(todoItem);
+        } catch (final Exception e) {
+            errors.add(e.getMessage());
+            e.printStackTrace();
+        }
         return TodoItemAdapter.toTodoItemResponse(todoItem, errors);
     }
 }

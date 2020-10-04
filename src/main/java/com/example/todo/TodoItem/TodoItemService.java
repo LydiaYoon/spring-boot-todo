@@ -27,6 +27,18 @@ public class TodoItemService {
         return todoItemRepository.insert(todoItem);
     }
 
+    public TodoItem update(final TodoItem newItem) {
+        if (Objects.isNull(newItem)) {
+            throw new NullPointerException("To Do Item cannot be null.");
+        }
+
+        final TodoItem originalItem = todoItemRepository.findById(newItem.getId())
+                .orElseThrow(() -> new RuntimeException("Entity Nor Found"));
+        originalItem.setTitle(newItem.getTitle());
+        originalItem.setDone(newItem.isDone());
+        return todoItemRepository.save(originalItem);
+    }
+
     public List<TodoItem> getAll() {
         return todoItemRepository.findAll();
     }

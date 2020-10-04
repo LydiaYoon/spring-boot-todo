@@ -14,6 +14,7 @@ public class TodoItemAdapter {
         }
 
         return TodoItem.builder()
+                .id(todoItemRequest.getId())
                 .title(todoItemRequest.getTitle())
                 .done(todoItemRequest.isDone())
                 .build();

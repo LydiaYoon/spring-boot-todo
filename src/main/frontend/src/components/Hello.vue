@@ -11,11 +11,11 @@
       <b-container fluid>
         <b-row class="my-1">
           <b-col sm="9">
-            <b-form-input v-model="newTodoItemRequest.title" type="text" placeholder="I want to ..."
+            <b-form-input block v-model="newTodoItemRequest.title" type="text" placeholder="I want to ..."
                           v-on:keyup.enter="createTodo"/>
           </b-col>
           <b-col sm="3">
-            <b-button variant="primary" v-on:click="createTodo">Add Task</b-button>
+            <b-button block variant="primary" v-on:click="createTodo">Add Task</b-button>
           </b-col>
         </b-row>
       </b-container>
@@ -27,8 +27,14 @@
         v-bind:key="todoItem.id"
         v-bind:data="todoItem.title">
         <b-form-checkbox
-          v-model="todoItem.done">
-          {{todoItem.title}}
+          v-model="todoItem.done"
+          v-on:change="changeMark(todoItem)">
+          <span v-if="todoItem.done" style="text-decoration: line-through; color: #d3d3de;">
+            {{todoItem.title}}
+          </span>
+          <span v-else>
+            {{todoItem.title}}
+          </span>
         </b-form-checkbox>
       </b-list-group-item>
     </b-list-group>
@@ -67,6 +73,18 @@
             console.log(response)
             vm.initTodoList()
             vm.newTodoItemRequest = {}
+          })
+          .catch(e => {
+            console.log('error : ', e)
+          })
+      },
+      changeMark: function (todoItem) {
+        if (!todoItem) return
+        let vm = this
+        todoItem.done = !todoItem.done
+        axios.put(baseUrl, todoItem)
+          .then(response => {
+            vm.initTodoList()
           })
           .catch(e => {
             console.log('error : ', e)
